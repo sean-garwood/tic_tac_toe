@@ -58,7 +58,8 @@ end
 class Move
   include MoveHelper
   def initialize(row, col, player)
-    @move = move
+    @row = row
+    @column = col
     @player = player
   end
 end
