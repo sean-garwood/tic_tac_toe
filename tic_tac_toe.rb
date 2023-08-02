@@ -1,17 +1,5 @@
 # frozen_string_literal: true
 
-# the goal of this is to create tic-tac-toe on the command line.
-# i need to...
-  # have a method that checks for a win after each turn
-  # have a representation of the game board
-    # multi-d array
-  # take input from user
-  # have computer make (random => optimal) moves
-
-# how to represent all of this in classes?
-
-# modules first
-
 # input/output
 module Talk
   def print_board
@@ -26,6 +14,7 @@ module MoveHelper
   def human?
     # check to see if player is human
   end
+
   def illegal?
     # check to see if the move is legal
   end
@@ -36,7 +25,7 @@ module MoveHelper
   end
 
   def letter
-    self.human? ? 'X' : 'O'
+    human? ? 'X' : 'O'
   end
 end
 
@@ -62,6 +51,15 @@ class GameBoard
   def mark_square(row, col, letter)
     # mark the square
     @state[row][col] = letter
+  end
+end
+
+# Move instances
+class Move
+  include MoveHelper
+  def initialize(row, col, player)
+    @move = move
+    @player = player
   end
 end
 
