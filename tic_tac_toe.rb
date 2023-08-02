@@ -55,6 +55,8 @@ class GameBoard
 end
 
 # Move instances
+# probably want to make these private to each player though, so they can't make
+# moves for their opponent.
 class Move
   include MoveHelper
   def initialize(row, col, player)
