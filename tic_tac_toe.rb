@@ -1,5 +1,17 @@
 # frozen_string_literal: true
 
+# Check to see if the game is over, and if so, return the result
+module GameOver
+  def cats_game?
+    # check to see if the game is a tie
+    # if moves = 9 and
+  end
+
+  def player_wins?
+    # check if player wins
+  end
+end
+
 # input
 
 # output
@@ -7,6 +19,11 @@ module Output
   def print_board
     # print the board to the console
   end
+
+  def game_over(winner)
+    winner == nil ? 'tie' : "#{winner} wins"
+  end
+
   # def to_s
   # end
 end
@@ -31,7 +48,15 @@ module MoveHelper
   end
 end
 
+# initializes the game, declares winner
 class Game
+  def initialize(player_one, player_two, winner = nil)
+    @player_one = player_one
+    @player_two = player_two
+    @winner = winner
+  end
+
+
 end
 
 # all things relating to the game board
@@ -48,20 +73,16 @@ class Board
   end
 end
 
-# Check to see if the game is over, and if so, return the result
-module GameOver
-  def cats_game?
-    # check to see if the game is a tie
-  end
-
-  def player_wins?
-    # check if player wins
+# create an object that has player, letter, position to play in
+class Turn
+  def initialize(letter, player, position)
+    @letter = letter
+    @player = player
+    @position = position
   end
 end
 
-# Move instances
-# probably want to make these private to each player though, so they can't make
-# moves for their opponent.
+# move object
 class Move
   include MoveHelper
   def initialize(user, row, col)
@@ -74,13 +95,30 @@ end
 # Represents state of each players. Initializes two Player objs/game: human and
 # computer.
 class Player
-  def initialize(user)
-    @user = user
+  def initialize(winner)
+    @winner = winner
   end
 end
 
-# i've outlined how to talk to the player, the game board state, and a set
-# of files to check for wins
+# Player instances to house methods
+class PlayerOne < Player
+  def initialize(winner, name)
+    super
+    @name = name
+  end
+end
 
-board = GameBoard.new
-p board
+class PlayerTwo < Player
+  def initialize(winner, name)
+    super
+    @name = name
+  end
+end
+
+winner = nil
+while !winner do
+  # some code
+  winner = "me"
+end
+
+puts Output.game_over(winner)
