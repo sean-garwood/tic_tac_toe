@@ -1,7 +1,9 @@
 # frozen_string_literal: true
 
-# input/output
-module Talk
+# input
+
+# output
+module Output
   def print_board
     # print the board to the console
   end
@@ -29,19 +31,11 @@ module MoveHelper
   end
 end
 
-# win_condition
-module WinCondition
-  def cats_game?
-    # check to see if the game is a tie
-  end
-
-  def player_wins?
-    # check if player wins
-  end
+class Game
 end
 
 # all things relating to the game board
-class GameBoard
+class Board
   include MoveHelper
   include WinCondition
   def initialize
@@ -54,22 +48,34 @@ class GameBoard
   end
 end
 
+# Check to see if the game is over, and if so, return the result
+module GameOver
+  def cats_game?
+    # check to see if the game is a tie
+  end
+
+  def player_wins?
+    # check if player wins
+  end
+end
+
 # Move instances
 # probably want to make these private to each player though, so they can't make
 # moves for their opponent.
 class Move
   include MoveHelper
-  def initialize(row, col, player)
+  def initialize(user, row, col)
+    @user = user
     @row = row
     @column = col
-    @player = player
   end
 end
 
-# Represents both players
+# Represents state of each players. Initializes two Player objs/game: human and
+# computer.
 class Player
-  def initialize(name)
-    @name = name
+  def initialize(user)
+    @user = user
   end
 end
 
@@ -77,3 +83,4 @@ end
 # of files to check for wins
 
 board = GameBoard.new
+p board
