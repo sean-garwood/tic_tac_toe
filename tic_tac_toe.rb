@@ -12,50 +12,67 @@
 
 # modules first
 
-# io
-
+# input/output
 module Talk
-  def report_game_state
+  def print_board
+    # print the board to the console
   end
   # def to_s
   # end
 end
 
+# check legality, do other stuff
+module MoveHelper
+  def human?
+    # check to see if player is human
+  end
+  def illegal?
+    # check to see if the move is legal
+  end
+
+  def random_move
+    # pick a random free square
+    # set game board to letter unless move.illegal?
+  end
+
+  def letter
+    self.human? ? 'X' : 'O'
+  end
+end
+
 # win_condition
 module WinCondition
   def cats_game?
+    # check to see if the game is a tie
+  end
+
+  def player_wins?
+    # check if player wins
+  end
 end
 
 # all things relating to the game board
-module GameBoard
+class GameBoard
+  include MoveHelper
   include WinCondition
-  @@state = Array.new(3) { Array.new(3) }
-
-  def mark_square(row, col, player)
-    if player == "user"
-      @@state[row][col] = 'X'
-    else
-      @@state[row][col] = 'O'
-    end
+  def initialize
+    @state = Array.new(3) { Array.new(3) }
   end
 
-  def print_board
+  def mark_square(row, col, letter)
+    # mark the square
+    @state[row][col] = letter
   end
 end
 
-class Players
-
-end
-
-class User < Players
-  def initialize(name, display_name)
+# Represents both players
+class Player
+  def initialize(name)
     @name = name
-    @display_name = display_name
   end
-end
-
-class Computer < Players
 end
 
 # i've outlined how to talk to the player, the game board state, and a set
 # of files to check for wins
+
+board = GameBoard.new
