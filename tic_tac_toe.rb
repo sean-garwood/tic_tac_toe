@@ -23,25 +23,39 @@ end
 
 # win_condition
 module WinCondition
+  def cats_game?
 end
 
 # all things relating to the game board
-class GameBoard
+module GameBoard
+  include WinCondition
+  @@state = Array.new(3) { Array.new(3) }
 
+  def mark_square(row, col, player)
+    if player == "user"
+      @@state[row][col] = 'X'
+    else
+      @@state[row][col] = 'O'
+    end
+  end
 
+  def print_board
+  end
 end
 
 class Players
-  include WinCondition
 
+end
+
+class User < Players
   def initialize(name, display_name)
     @name = name
     @display_name = display_name
   end
 end
 
-class User > Players
+class Computer < Players
 end
 
-class Computer > Players
-end
+# i've outlined how to talk to the player, the game board state, and a set
+# of files to check for wins
