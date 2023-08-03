@@ -32,8 +32,6 @@ The following items need to have objects to represent them in memory:
 - Moves
 - Turns
 
-Taking a turn is a procedure, so it does not need an object per se, but it could
-be a message that is sent to game state.
 gameboard will be public.
 player moves will be public
 setting the winner needs to be private to the Game instance
