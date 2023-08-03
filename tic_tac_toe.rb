@@ -2,40 +2,43 @@
 
 # check legality, do other stuff
 module MoveHelper
-  def random_move
-    # pick a random free square
-    # set game board to letter unless move.illegal?
+  def illegal?
+    # check to see if move is legal, i.e. if the destination is blank.
   end
 end
 
 # initializes the game, declares winner
 class Game
-  attr_accessor :winner
-
   def initialize(player_one, player_two, winner = nil)
     @player_one = player_one
     @player_two = player_two
-    @winner = winner
-  end
-
-  def end_game
-    puts winner.nil? ? nil : winner
-  end
-
-  def declare_winner(winner)
-    @winner = winner
   end
 
   def cats_game?
     # check to see if the game is a tie
     # if moves = 9 and
   end
+
+  private
+
+  attr_accessor :winner
+
+  def end_game
+    # winner.nil? ? nil : winner
+  end
 end
 
 # all things relating to the game board
 class Board
+  include MoveHelper
+  attr_reader :state
+
   def initialize
-    @state = Array.new(3) { Array.new(3) }
+    @state = Array.new(3) { Array.new(3, '') }
+  end
+
+  def print_board
+    puts @state
   end
 
   def mark_square(row, col, letter)
@@ -43,8 +46,10 @@ class Board
     @state[row][col] = letter unless illegal?
   end
 
-  def print_board
-    # print the board to the console
+  private
+
+  def to_s
+    @state.each { |row| "#{row.flatten.join("\n")}" }
   end
 end
 
@@ -58,7 +63,7 @@ class Move
   end
 
   def illegal?
-    # check to see if the move is legal
+    true unless @state[row][col] != ''
   end
 end
 
@@ -70,8 +75,8 @@ class Player
   def initialize(name)
     @name = name
   end
-
-  def wins?
-    @winner
-  end
 end
+
+board = Board.new
+
+board.print_board
