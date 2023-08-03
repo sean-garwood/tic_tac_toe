@@ -1,15 +1,5 @@
 # frozen_string_literal: true
 
-# output
-module Output
-  def print_board
-    # print the board to the console
-  end
-
-  # def to_s
-  # end
-end
-
 # check legality, do other stuff
 module MoveHelper
   def illegal?
@@ -24,14 +14,20 @@ end
 
 # initializes the game, declares winner
 class Game
+  attr_accessor :winner
+
   def initialize(player_one, player_two, winner = nil)
     @player_one = player_one
     @player_two = player_two
     @winner = winner
   end
 
-  def self.game_over(winner)
-    winner.nil? ? nil : winner
+  def end_game
+    puts winner.nil? ? nil : winner
+  end
+
+  def declare_winner(winner)
+    @winner = winner
   end
 
   def cats_game?
@@ -46,28 +42,31 @@ end
 
 # all things relating to the game board
 class Board
-  include MoveHelper
   def initialize
     @state = Array.new(3) { Array.new(3) }
   end
 
   def mark_square(row, col, letter)
     # mark the square
-    @state[row][col] = letter
+    @state[row][col] = letter unless illegal?
+  end
+
+  def print_board
+    # print the board to the console
   end
 end
 
 # create an object that has player, letter, position to play in
 class Turn
-  def initialize(letter, player, position)
-    @letter = letter
+  attr_accessor :player
+
+  def initialize(player)
     @player = player
-    @position = position
   end
 end
 
 # move object
-class Move
+class Move < Turn
   include MoveHelper
   def initialize(user, row, col)
     @user = user
@@ -76,34 +75,14 @@ class Move
   end
 end
 
+
 # Represents state of each players. Initializes two Player objs/game: human and
 # computer.
 class Player
-  def initialize(winner)
-    @winner = winner
-  end
-end
+  attr_reader :winner
 
-# Player instances to house methods
-class PlayerOne < Player
-  def initialize(winner, name)
-    super
+  def initialize(name, winner = false)
     @name = name
   end
-end
 
-# ...
-class PlayerTwo < Player
-  def initialize(winner, name)
-    super
-    @name = name
-  end
 end
-
-winner = nil
-while !winner do
-  # some code
-  winner = "me"
-end
-
-puts Game.game_over(winner)
