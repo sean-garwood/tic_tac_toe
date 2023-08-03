@@ -45,15 +45,6 @@ class Board
   end
 end
 
-# move object
-class Move
-  def initialize(player, row, col)
-    @player = player
-    @row = row
-    @column = col
-  end
-end
-
 # Represents state of each players. Initializes two Player objs/game: human and
 # computer.
 class Player
