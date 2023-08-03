@@ -2,6 +2,7 @@
 
 # initializes the game, declares winner
 class Game
+  attr_reader :player_one, :player_two, :winner
   def initialize(player_one, player_two, winner = nil)
     @player_one = player_one
     @player_two = player_two
@@ -12,13 +13,14 @@ class Game
     # if moves = 9 and
   end
 
+  def declare_winner
+    @winner = "me"
+    puts @winner.to_s
+  end
+
   private
 
-  attr_accessor :winner
-
-  def end_game
-    # winner.nil? ? nil : winner
-  end
+  attr_writer :winner
 end
 
 # all things relating to the game board
@@ -41,7 +43,7 @@ class Board
   private
 
   def to_s
-    @state.each { |row| "#{row.flatten.join("\n")}" }
+    @state.each { |row| "#{row.flatten.join('').join("\n")}" }
   end
 end
 
@@ -56,7 +58,14 @@ class Player
 end
 
 board = Board.new
-
-board.mark_square(1,1,'a')
-
+sean = Player.new("sean")
+tom = Player.new("tom")
+game = Game.new(sean, tom)
+board.mark_square(1, 1, 'a')
 board.print_board
+
+while game.winner do
+  6.times { puts "hi\n" }
+  game.end_game
+end
+game.declare_winner
