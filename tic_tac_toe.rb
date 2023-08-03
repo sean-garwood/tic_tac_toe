@@ -1,12 +1,5 @@
 # frozen_string_literal: true
 
-# check legality, do other stuff
-module MoveHelper
-  def illegal?
-    # check to see if move is legal, i.e. if the destination is blank.
-  end
-end
-
 # initializes the game, declares winner
 class Game
   def initialize(player_one, player_two, winner = nil)
@@ -30,7 +23,6 @@ end
 
 # all things relating to the game board
 class Board
-  include MoveHelper
   attr_reader :state
 
   def initialize
@@ -43,7 +35,7 @@ class Board
 
   def mark_square(row, col, letter)
     # mark the square
-    @state[row][col] = letter unless illegal?
+    @state[row][col] = letter unless letter != ''
   end
 
   private
@@ -55,15 +47,10 @@ end
 
 # move object
 class Move
-  include MoveHelper
   def initialize(player, row, col)
     @player = player
     @row = row
     @column = col
-  end
-
-  def illegal?
-    true unless @state[row][col] != ''
   end
 end
 
@@ -78,5 +65,7 @@ class Player
 end
 
 board = Board.new
+
+board.mark_square(1,1,'a')
 
 board.print_board
