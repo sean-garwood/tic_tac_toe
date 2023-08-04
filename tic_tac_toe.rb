@@ -3,6 +3,7 @@
 # initializes the game, declares winner
 class Game
   attr_reader :player_one, :player_two, :winner
+
   def initialize(player_one, player_two, winner = nil)
     @player_one = player_one
     @player_two = player_two
@@ -14,8 +15,8 @@ class Game
   end
 
   def declare_winner
-    @winner = "me"
-    puts @winner.to_s
+    @winner = 'me'
+    puts @winner
   end
 
   private
@@ -25,25 +26,27 @@ end
 
 # all things relating to the game board
 class Board
-  attr_reader :state
+  attr_reader :board
 
   def initialize
-    @state = Array.new(3) { Array.new(3, '') }
+    @board = Array.new(3) { Array.new(3, '[ ]') }
   end
 
   def print_board
-    puts @state
+    puts @board
   end
 
   def mark_square(row, col, letter)
     # mark the square
-    @state[row][col] = letter unless letter != ''
+    @board[row][col] = letter unless letter != ''
   end
 
   private
 
+  attr_writer :board
+
   def to_s
-    @state.each { |row| "#{row.flatten.join('').join("\n")}" }
+    @board.each { |row| "#{row.flatten.join('').join("\n")}" }
   end
 end
 
@@ -63,9 +66,3 @@ tom = Player.new("tom")
 game = Game.new(sean, tom)
 board.mark_square(1, 1, 'a')
 board.print_board
-
-while game.winner do
-  6.times { puts "hi\n" }
-  game.end_game
-end
-game.declare_winner
