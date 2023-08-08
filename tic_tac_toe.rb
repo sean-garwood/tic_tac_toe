@@ -32,23 +32,21 @@ class Board
     @board = Array.new(3) { Array.new(3, '[ ]') }
   end
 
-  def print_board
-    puts @board
-  end
-
   def mark_square(row, col, letter)
     # mark the square
 
-    @board[row][col] = letter unless @board[row][col] != '[ ]'
+    @board[row][col] = "[#{letter}]" unless @board[row][col] != '[ ]'
+  end
+
+  def print_board
+    @board.each do |row|
+      puts row.each { |e| e }.join(" ")
+    end
   end
 
   private
 
   attr_writer :board
-
-  def to_s
-    @board.each { |row| "#{row.join}" }
-  end
 end
 
 # Represents state of each players. Initializes two Player objs/game: human and
@@ -66,6 +64,4 @@ sean = Player.new("sean")
 tom = Player.new("tom")
 game = Game.new(sean, tom)
 board.mark_square(1, 1, 'a')
-board.print_board
-board.mark_square(1, 1, 'b')
 board.print_board
