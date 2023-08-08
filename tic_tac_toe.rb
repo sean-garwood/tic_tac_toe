@@ -38,7 +38,8 @@ class Board
 
   def mark_square(row, col, letter)
     # mark the square
-    @board[row][col] = letter unless letter != ''
+    target = @board[row][col]
+    target = letter unless target != '[ ]'
   end
 
   private
@@ -46,7 +47,7 @@ class Board
   attr_writer :board
 
   def to_s
-    @board.each { |row| "#{row.flatten.join('').join("\n")}" }
+    @board.each { |row| "#{row.join('')}" }
   end
 end
 
