@@ -55,19 +55,30 @@ class Player
   @@players = 1
 
   def initialize
-    @name = start_game
+    @name = username
     @@players +=1
   end
 
   private
 
-  def start_game
+  def username
     puts "Welcome, player #{@@players.to_s}! Enter your name:"
     gets.chomp
   end
-
 end
 
+# Instances of turns
+class Turn
+  @@turn = 1
+  def initialize(player, turn_number, move = nil)
+    puts board
+    puts "-=-TURN #{turn_number}-=-\nGo ahead, #{player.name}."
+  end
+end
+
+board = Board.new
 player_one = Player.new
 player_two = Player.new
 Game.new(player_one, player_two)
+turn = 1
+turn.odd? ? Turn.new(player_one.name, turn) : Turn.new(player_two.name, turn)
