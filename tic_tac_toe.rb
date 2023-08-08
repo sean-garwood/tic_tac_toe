@@ -7,7 +7,7 @@ module TurnHelper
   end
 
   def report
-    puts "-=-TURN #{@turn_number}-=-\nGo ahead, #{player_turn}"
+    puts "-=-TURN #{@turn_number}-=-\n\nGo ahead, #{player_turn}\n"
   end
 end
 
@@ -24,7 +24,6 @@ class Board
   def mark_square(row, col, letter)
     @board[row][col] = "[#{letter}]" unless @board[row][col] != '[ ]'
   end
-
 
   def print_board
     @board.each do |row|
@@ -96,17 +95,17 @@ class Player
     puts "Welcome, player #{@@players}! Enter your name:"
     gets.chomp
   end
-
 end
 
 def take_turn(player, board, game)
   game.report
   board.print_board
-  puts 'Make your move. Enter the desired row.'
+  puts "Make your move.\n\nEnter the desired row."
   row = gets.chomp.to_i
   puts 'Enter the column.'
   col = gets.chomp.to_i
   board.mark_square(row, col, player.letter)
+  # check for winner
   game.bump_turn_number
 end
 
@@ -114,11 +113,9 @@ player_one = Player.new
 player_two = Player.new
 board = Board.new
 game = Game.new(player_one, player_two)
-puts 'Game on! Good luck, players.'
-puts player_one.name; puts player_two.name
-board.print_board
+puts "Game on! Good luck, players.\n"
 
-while game.turn_number <= 9 do
+while game.turn_number <= 8
   take_turn(player_one, board, game)
   take_turn(player_two, board, game)
 end
