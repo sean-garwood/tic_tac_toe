@@ -33,14 +33,12 @@ class Board
   end
 
   def mark_square(row, col, letter)
-    # mark the square
-
     @board[row][col] = "[#{letter}]" unless @board[row][col] != '[ ]'
   end
 
   def print_board
     @board.each do |row|
-      puts row.each { |e| e }.join(" ")
+      puts row.map { |e| e }.join(' ')
     end
   end
 
@@ -49,19 +47,27 @@ class Board
   attr_writer :board
 end
 
-# Represents state of each players. Initializes two Player objs/game: human and
+# Represents state of each player. Initializes two Player objs/game: human and
 # computer.
 class Player
   attr_reader :name
 
-  def initialize(name)
-    @name = name
+  @@players = 1
+
+  def initialize
+    @name = start_game
+    @@players +=1
   end
+
+  private
+
+  def start_game
+    puts "Welcome, player #{@@players.to_s}! Enter your name:"
+    gets.chomp
+  end
+
 end
 
-board = Board.new
-sean = Player.new("sean")
-tom = Player.new("tom")
-game = Game.new(sean, tom)
-board.mark_square(1, 1, 'a')
-board.print_board
+player_one = Player.new
+player_two = Player.new
+Game.new(player_one, player_two)
