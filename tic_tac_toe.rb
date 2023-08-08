@@ -1,28 +1,46 @@
 # frozen_string_literal: true
 
+module TurnHelper
+  def player_turn
+    @turn_number.odd? ? @player_one.name : @player_two.name
+  end
+end
+
+def report
+  player_turn
+  puts "-=-TURN #{@turn_number}-=-\nGo ahead, #{player_turn}"
+end
+
 # initializes the game, declares winner
 class Game
-  attr_reader :player_one, :player_two, :winner
+  attr_reader :player_one, :player_two, :turn_number, :winner
 
-  def initialize(player_one, player_two, winner = nil)
+  includes TurnHelper
+
+  def initialize(player_one, player_two)
     @player_one = player_one
     @player_two = player_two
-  end
-
-  def cats_game?
-    # check to see if the game is a tie
-    # if moves = 9 and
-  end
-
-  def declare_winner
-    @winner = 'me'
-    puts @winner
+    @turn_number = 1
+    @winner = nil
   end
 
   private
 
-  attr_writer :winner
-end
+  attr_writer :turn_number, :winner
+
+  def cats_game?
+    @turn_number == 9 && @winner.nil
+    cats_game
+  end
+
+  def declare_winner
+    puts @winner
+  end
+
+  def cats_game
+    # puts something about a tie game and no one wins.
+  end
+  end
 
 # all things relating to the game board
 class Board
@@ -56,29 +74,26 @@ class Player
 
   def initialize
     @name = username
-    @@players +=1
+    @@players += 1
   end
 
   private
 
   def username
-    puts "Welcome, player #{@@players.to_s}! Enter your name:"
+    puts "Welcome, player #{@@players}! Enter your name:"
     gets.chomp
-  end
-end
-
-# Instances of turns
-class Turn
-  @@turn = 1
-  def initialize(player, turn_number, move = nil)
-    puts board
-    puts "-=-TURN #{turn_number}-=-\nGo ahead, #{player.name}."
   end
 end
 
 board = Board.new
 player_one = Player.new
 player_two = Player.new
-Game.new(player_one, player_two)
-turn = 1
-turn.odd? ? Turn.new(player_one.name, turn) : Turn.new(player_two.name, turn)
+game = Game.new(player_one, player_two)
+puts 'Game on! Good luck, players.'
+game.report
+board.print_board
+puts 'Make your move. Enter the desired row.'
+row = gets.chomp
+puts 'Enter the column.'
+col = gets.chomp
+board.mark_square(row, col, )
