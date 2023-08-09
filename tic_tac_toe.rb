@@ -37,15 +37,6 @@ class Board
     @board = NEW_BOARD
   end
 
-  def fill_board
-    @board.each do |row|
-      row.each_index do |index|
-        row[index] = '[x]'
-      end
-    end
-    @board[0][0] = '[ ]'
-  end
-
   def full?
     @board.all? do |row|
       row.all? { |cell| cell != EMPTY_SPACE }
