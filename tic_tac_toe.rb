@@ -1,5 +1,9 @@
 # frozen_string_literal: true
 
+module WinCondition
+  wins = [
+
+  ]
 # does boring stuff re: turns
 module TurnHelper
   def player_turn
@@ -58,16 +62,17 @@ class Game
   attr_writer :turn_number, :winner
 
   def cats_game?
-    @turn_number == 9 && @winner.nil
+    @turn_number == 9 && @winner.nil?
     cats_game
   end
 
-  def declare_winner
-    puts @winner
+  def declare_winner(winner)
+    @winner = winner
+    exit(puts "#{@winner} wins!")
   end
 
   def cats_game
-    # puts something about a tie game and no one wins.
+    exit(puts 'Tie game! nobody wins.')
   end
 end
 
