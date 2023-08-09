@@ -2,9 +2,10 @@
 
 # check board state for a win
 module WinCondition
+  EMPTY_SPACE = '[ ]'
   def winning_row?
     @board.each do |row|
-      win = row[0] == row[1] && row[1] == row[2] && !row.includes?(EMPTY_SPACE)
+      win = row[0] == row[1] && row[1] == row[2] && !row.include?(EMPTY_SPACE)
       if win
         return true
       else
@@ -12,6 +13,14 @@ module WinCondition
       end
     end
     false
+  end
+
+  # check whether the nth index in each row is equal to the nth index in the
+  # other two rows and none are blank.
+  def winning_column?
+    @board.reduce([]) do |nth_elements, row|
+      nth_elements.push(row[0], row[1], row[2])
+    end
   end
 end
 
@@ -35,6 +44,14 @@ class Board
 
   def initialize
     @board = NEW_BOARD
+  end
+
+  def fill_board
+    @board.each do |row|
+      row.each_index do |index|
+        row[index] = '[x]'
+      end
+    end
   end
 
   def full?
@@ -75,6 +92,12 @@ class Game
     @turn_number += 1
   end
 
+  def declare_winner(winner)
+    @winner = winner
+    puts("#{@winner} wins!")
+    exit
+  end
+
   private
 
   attr_writer :turn_number, :winner
@@ -83,13 +106,9 @@ class Game
     board.full? && @winner.nil?
   end
 
-  def declare_winner(winner)
-    @winner = winner
-    exit(puts("#{@winner} wins!"))
-  end
-
   def cats_game
-    exit(puts('Tie game! nobody wins.'))
+    puts('Tie game! Nobody wins.')
+    exit
   end
 
   def over?
@@ -142,7 +161,10 @@ game = Game.new(player_one, player_two)
 puts "Game on! Good luck, players.\n"
 
 puts '---debug---'
+# board.fill_board
 board.print_board
 board.fill_board
 board.print_board
+board.winning_row? ? game.declare_winner('king') : "didn't work"
 puts board.full?
+board.print_board
