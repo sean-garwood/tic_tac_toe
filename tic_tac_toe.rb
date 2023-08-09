@@ -25,6 +25,10 @@ class Board
     @board = NEW_BOARD
   end
 
+  def full?
+    @board.include?('[ ]')
+  end
+
   def mark_square(row, col, letter)
     @board[row][col] = "[#{letter}]" unless @board[row][col] != '[ ]'
   end
