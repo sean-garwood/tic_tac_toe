@@ -1,9 +1,20 @@
 # frozen_string_literal: true
 
+# check board state for a win
 module WinCondition
-  wins = [
+  def winning_row?
+    @board.each do |row|
+      win = row[0] == row[1] && row[1] == row[2] && !row.includes?(EMPTY_SPACE)
+      if win
+        return true
+      else
+        next
+      end
+    end
+    false
+  end
+end
 
-  ]
 # does boring stuff re: turns
 module TurnHelper
   def player_turn
@@ -17,20 +28,32 @@ end
 
 # all things relating to the game board
 class Board
-  NEW_BOARD = Array.new(3) { Array.new(3, '[ ]') }
-
+  EMPTY_SPACE = '[ ]'
+  NEW_BOARD = Array.new(3) { Array.new(3, EMPTY_SPACE) }
+  include WinCondition
   attr_reader :board
 
   def initialize
     @board = NEW_BOARD
   end
 
+  def fill_board
+    @board.each do |row|
+      row.each_index do |index|
+        row[index] = '[x]'
+      end
+    end
+    @board[0][0] = '[ ]'
+  end
+
   def full?
-    @board.include?('[ ]')
+    @board.all? do |row|
+      row.all? { |cell| cell != EMPTY_SPACE }
+    end
   end
 
   def mark_square(row, col, letter)
-    @board[row][col] = "[#{letter}]" unless @board[row][col] != '[ ]'
+    @board[row][col] = "[#{letter}]" unless @board[row][col] != EMPTY_SPACE
   end
 
   def print_board
@@ -46,9 +69,9 @@ end
 
 # initializes the game, declares winner
 class Game
-  attr_reader :player_one, :player_two, :turn_number, :winner
-
   include TurnHelper
+  include WinCondition
+  attr_reader :player_one, :player_two, :turn_number, :winner
 
   def initialize(player_one, player_two)
     @player_one = player_one
@@ -65,18 +88,21 @@ class Game
 
   attr_writer :turn_number, :winner
 
-  def cats_game?
-    @turn_number == 9 && @winner.nil?
-    cats_game
+  def cats_game?(board)
+    board.full? && @winner.nil?
   end
 
   def declare_winner(winner)
     @winner = winner
-    exit(puts "#{@winner} wins!")
+    exit(puts("#{@winner} wins!"))
   end
 
   def cats_game
-    exit(puts 'Tie game! nobody wins.')
+    exit(puts('Tie game! nobody wins.'))
+  end
+
+  def over?
+    @winner.nil? ? false : true
   end
 end
 
@@ -124,7 +150,8 @@ board = Board.new
 game = Game.new(player_one, player_two)
 puts "Game on! Good luck, players.\n"
 
-while game.turn_number <= 8
-  take_turn(player_one, board, game)
-  take_turn(player_two, board, game)
-end
+puts '---debug---'
+board.print_board
+board.fill_board
+board.print_board
+puts board.full?
