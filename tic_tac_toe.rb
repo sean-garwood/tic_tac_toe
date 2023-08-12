@@ -159,12 +159,3 @@ player_two = Player.new
 board = Board.new
 game = Game.new(player_one, player_two)
 puts "Game on! Good luck, players.\n"
-
-puts '---debug---'
-# board.fill_board
-board.print_board
-board.fill_board
-board.print_board
-board.winning_row? ? game.declare_winner('king') : "didn't work"
-puts board.full?
-board.print_board
