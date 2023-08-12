@@ -2,7 +2,7 @@
 
 # check board state for a win
 module WinCondition
-  EMPTY_SPACE = '[ ]'
+  EMPTY_SPACE = 0
   def winning_row?
     @board.each do |row|
       win = row[0] == row[1] && row[1] == row[2] && !row.include?(EMPTY_SPACE)
@@ -37,7 +37,7 @@ end
 
 # all things relating to the game board
 class Board
-  EMPTY_SPACE = '[ ]'
+  EMPTY_SPACE = 0
   NEW_BOARD = Array.new(3) { Array.new(3, EMPTY_SPACE) }
   include WinCondition
   attr_reader :board
@@ -49,7 +49,7 @@ class Board
   def fill_board
     @board.each do |row|
       row.each_index do |index|
-        row[index] = '[x]'
+        row[index] = 1
       end
     end
   end
@@ -66,7 +66,17 @@ class Board
 
   def print_board
     @board.each do |row|
-      puts row.map { |e| e }.join(' ')
+      readable = row.map do |square|
+        case square
+        when 1
+          square = 1
+        when -1
+          square = -1
+        else
+          square = '[ ]'
+        end
+      end
+      puts readable.join('')
     end
   end
 
@@ -133,7 +143,7 @@ class Player
   attr_writer :letter
 
   def player_letter
-    @@players.odd? ? 'x' : 'o'
+    @@players.odd? ? 1 : -1
   end
 
   def create_username
@@ -150,12 +160,16 @@ def take_turn(player, board, game)
   puts 'Enter the column.'
   col = gets.chomp.to_i
   board.mark_square(row, col, player.letter)
-  # check for winner
+  # check winner
   game.bump_turn_number
 end
 
+# get players, init board and game
 player_one = Player.new
 player_two = Player.new
 board = Board.new
 game = Game.new(player_one, player_two)
 puts "Game on! Good luck, players.\n"
+
+# board.fill_board
+board.print_board
