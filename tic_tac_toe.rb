@@ -3,24 +3,20 @@
 # check board state for a win
 module WinCondition
   EMPTY_SPACE = 0
-  def winning_row?
-    @board.each do |row|
-      win = row[0] == row[1] && row[1] == row[2] && !row.include?(EMPTY_SPACE)
-      if win
-        return true
-      else
-        next
-      end
+  def winning_row?(board)
+    win = 3
+    board.each do |row|
+      sum_of_row = row.reduce(0) { |sum, value| sum + value.abs }
+      sum_of_row == win ? true : next
     end
     false
   end
 
   # check whether the nth index in each row is equal to the nth index in the
   # other two rows and none are blank.
-  def winning_column?
-    @board.reduce([]) do |nth_elements, row|
-      nth_elements.push(row[0], row[1], row[2])
-    end
+  def winning_column?(board)
+    columns = board.transpose
+    winning_row?(columns)
   end
 end
 
@@ -44,14 +40,6 @@ class Board
 
   def initialize
     @board = NEW_BOARD
-  end
-
-  def fill_board
-    @board.each do |row|
-      row.each_index do |index|
-        row[index] = 1
-      end
-    end
   end
 
   def full?
