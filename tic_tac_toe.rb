@@ -69,9 +69,9 @@ class Board
       readable = row.map do |square|
         case square
         when 1
-          square = 1
+          square = '[x]'
         when -1
-          square = -1
+          square = '[o]'
         else
           square = '[ ]'
         end
@@ -171,5 +171,5 @@ board = Board.new
 game = Game.new(player_one, player_two)
 puts "Game on! Good luck, players.\n"
 
-# board.fill_board
+board.fill_board
 board.print_board
