@@ -49,7 +49,7 @@ class Board
   end
 
   def mark_square(row, col, letter)
-    @board[row][col] = "[#{letter}]" unless @board[row][col] != EMPTY_SPACE
+    @board[row][col] = letter unless @board[row][col] != EMPTY_SPACE
   end
 
   def print_board
