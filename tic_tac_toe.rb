@@ -8,17 +8,17 @@ module WinCondition
     sum_of_first_diag = 0
     sum_of_second_diag = 0
     board.each_with_index do |row, index|
-      sum_of_first_diag += row[index].abs
-      sum_of_second_diag += row[row.length - 1 - index].abs
+      sum_of_first_diag += row[index]
+      sum_of_second_diag += row[row.length - 1 - index]
     end
-    [sum_of_first_diag, sum_of_second_diag]
+    [sum_of_first_diag.abs, sum_of_second_diag.abs]
   end
 
   def winning_row?(board)
     win = 3
     board.each do |row|
-      sum_of_row = row.reduce(0) { |sum, value| sum + value.abs }
-      if sum_of_row == win
+      sum_of_row = row.reduce(0) { |sum, value| sum + value }
+      if sum_of_row.abs == win
         return true
       else
         next
@@ -41,7 +41,7 @@ module WinCondition
   end
 
   def cats_game?(board)
-    board.full? && @winner.nil?
+    board.full? && !@winner
   end
 end
 
@@ -175,6 +175,7 @@ def take_turn(player, board, game)
   board.mark_square(row, col, player.letter)
   board.check_winner ? game.declare_winner(player) : false
   game.bump_turn_number
+  game.cats_game?(board) ? game.declare_tie : nil
 end
 
 # get players, init board and game
