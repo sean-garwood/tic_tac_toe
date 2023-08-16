@@ -1,8 +1,19 @@
 # frozen_string_literal: true
 
+# require 'pry-byebug'
+
 # check board state for a win
 module WinCondition
-  EMPTY_SPACE = 0
+  def sum_diagonals(board)
+    sum_of_first_diag = 0
+    sum_of_second_diag = 0
+    board.each_with_index do |row, index|
+      sum_of_first_diag += row[index].abs
+      sum_of_second_diag += row[row.length - 1 - index].abs
+    end
+    [sum_of_first_diag, sum_of_second_diag]
+  end
+
   def winning_row?(board)
     win = 3
     board.each do |row|
@@ -12,11 +23,17 @@ module WinCondition
     false
   end
 
-  # check whether the nth index in each row is equal to the nth index in the
-  # other two rows and none are blank.
   def winning_column?(board)
     columns = board.transpose
     winning_row?(columns)
+  end
+
+  def winning_diagonal?(board)
+    sum_diagonals(board).include?(3)
+  end
+
+  def cats_game?(board)
+    board.full? && @winner.nil?
   end
 end
 
@@ -57,15 +74,19 @@ class Board
       readable = row.map do |square|
         case square
         when 1
-          square = '[x]'
+          '[x]'
         when -1
-          square = '[o]'
+          '[o]'
         else
-          square = '[ ]'
+          '[ ]'
         end
       end
       puts readable.join('')
     end
+  end
+
+  def check_winner
+    winning_column?(@board) || winning_diagonal?(@board) || winning_row?(@board)
   end
 
   protected
@@ -83,34 +104,34 @@ class Game
     @player_one = player_one
     @player_two = player_two
     @turn_number = 1
-    @winner = nil
+    @winner = false
   end
 
   def bump_turn_number
     @turn_number += 1
   end
 
-  def declare_winner(winner)
-    @winner = winner
-    puts("#{@winner} wins!")
+  def declare_winner(player)
+    @winner = player
+    puts("#{player.name} wins!")
     exit
+  end
+
+  def declare_tie
+    cats_game
+  end
+
+  def over?
+    @winner ? true : false
   end
 
   private
 
   attr_writer :turn_number, :winner
 
-  def cats_game?(board)
-    board.full? && @winner.nil?
-  end
-
   def cats_game
     puts('Tie game! Nobody wins.')
     exit
-  end
-
-  def over?
-    @winner.nil? ? false : true
   end
 end
 
@@ -148,7 +169,7 @@ def take_turn(player, board, game)
   puts 'Enter the column.'
   col = gets.chomp.to_i
   board.mark_square(row, col, player.letter)
-  # check winner
+  board.check_winner ? game.declare_winner(player.name) : false
   game.bump_turn_number
 end
 
@@ -159,5 +180,7 @@ board = Board.new
 game = Game.new(player_one, player_two)
 puts "Game on! Good luck, players.\n"
 
-board.fill_board
-board.print_board
+until game.over?
+  take_turn(player_one, board, game)
+  take_turn(player_two, board, game)
+end
