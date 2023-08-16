@@ -184,11 +184,7 @@ board = Board.new
 game = Game.new(player_one, player_two)
 puts "Game on! Good luck, players.\n"
 
-board.mark_square(0,0,1)
-board.mark_square(0,1,1)
-
 until game.over?
   take_turn(player_one, board, game)
   take_turn(player_two, board, game)
-  binding.pry
 end
