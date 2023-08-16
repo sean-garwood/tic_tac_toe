@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-# require 'pry-byebug'
+require 'pry-byebug'
 
 # check board state for a win
 module WinCondition
@@ -18,7 +18,11 @@ module WinCondition
     win = 3
     board.each do |row|
       sum_of_row = row.reduce(0) { |sum, value| sum + value.abs }
-      sum_of_row == win ? true : next
+      if sum_of_row == win
+        return true
+      else
+        next
+      end
     end
     false
   end
@@ -30,6 +34,10 @@ module WinCondition
 
   def winning_diagonal?(board)
     sum_diagonals(board).include?(3)
+  end
+
+  def check_winner
+    winning_column?(@board) || winning_diagonal?(@board) || winning_row?(@board)
   end
 
   def cats_game?(board)
@@ -83,10 +91,6 @@ class Board
       end
       puts readable.join('')
     end
-  end
-
-  def check_winner
-    winning_column?(@board) || winning_diagonal?(@board) || winning_row?(@board)
   end
 
   protected
@@ -169,7 +173,7 @@ def take_turn(player, board, game)
   puts 'Enter the column.'
   col = gets.chomp.to_i
   board.mark_square(row, col, player.letter)
-  board.check_winner ? game.declare_winner(player.name) : false
+  board.check_winner ? game.declare_winner(player) : false
   game.bump_turn_number
 end
 
@@ -180,7 +184,11 @@ board = Board.new
 game = Game.new(player_one, player_two)
 puts "Game on! Good luck, players.\n"
 
+board.mark_square(0,0,1)
+board.mark_square(0,1,1)
+
 until game.over?
   take_turn(player_one, board, game)
   take_turn(player_two, board, game)
+  binding.pry
 end
